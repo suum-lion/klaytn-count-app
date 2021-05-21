@@ -6,10 +6,12 @@ import React, {
   useRef,
   useState
 } from "react";
+import { useKaikas } from "../hooks/useKaikas";
 import caver from "../klaytn/caver";
 import "./Count.scss";
 
 const Count = () => {
+  const { account, balance } = useKaikas();
   const { DEPLOYED_ABI, DEPLOYED_ADDRESS } = useMemo(() => {
     return {
       DEPLOYED_ABI: process.env.DEPLOYED_ABI,
@@ -42,76 +44,66 @@ const Count = () => {
   }, [countContract.methods]);
 
   const setPlus = useCallback(() => {
-    const walletInstance =
-      caver.klay.accounts.wallet && caver.klay.accounts.wallet[0];
-    if (!walletInstance) return;
 
     setDirection("plus");
 
     // TODO event emitter 처리
-    countContract.methods
-      .plus()
-      .send({
-        from: walletInstance.address,
-        gas: "200000"
-      })
-      // .on("transactionHash", txHash => {
-      //   console.log(`
-      //     Sending a transaction... (Call contract's function 'plus')
-      //     txHash: ${txHash}
-      //     `);
-      // })
-      // .on("receipt", receipt => {
-      //   console.log(
-      //     `
-      //     Received receipt! It means your transaction(calling plus function)
-      //     is in klaytn block(#${receipt.blockNumber})
-      //   `,
-      //     receipt
-      //   );
-      //   setDirection(null);
-      //   setTxHash(receipt.transactionHash);
-      // })
-      // .on("error", error => {
-      //   alert(error.message);
-      //   setDirection(null);
-      // });
-  }, [countContract.methods]);
+    countContract.methods.plus().send({
+      from: account,
+      gas: "200000"
+    });
+    // .on("transactionHash", txHash => {
+    //   console.log(`
+    //     Sending a transaction... (Call contract's function 'plus')
+    //     txHash: ${txHash}
+    //     `);
+    // })
+    // .on("receipt", receipt => {
+    //   console.log(
+    //     `
+    //     Received receipt! It means your transaction(calling plus function)
+    //     is in klaytn block(#${receipt.blockNumber})
+    //   `,
+    //     receipt
+    //   );
+    //   setDirection(null);
+    //   setTxHash(receipt.transactionHash);
+    // })
+    // .on("error", error => {
+    //   alert(error.message);
+    //   setDirection(null);
+    // });
+  }, [account, countContract.methods]);
 
   const setMinus = useCallback(() => {
-    const walletInstance =
-      caver.klay.accounts.wallet && caver.klay.accounts.wallet[0];
-    if (!walletInstance) return;
 
     setDirection("minus");
-    countContract.methods
-      .minus()
-      .send({
-        from: walletInstance.address,
-        gas: "200000"
-      })
-      // .on("transactionHash", txHash => {
-      //   console.log(`
-      //   Sending a transaction... (Call contract's function 'minus')
-      //   txHash: ${txHash}
-      //   `);
-      // })
-      // .on("receipt", receipt => {
-      //   console.log(
-      //     `
-      //   Received receipt which means your transaction(calling minus function)
-      //   is in klaytn block(#${receipt.blockNumber})
-      // `,
-      //     receipt
-      //   );
-      //   setDirection(null);
-      //   setTxHash(receipt.transactionHash);
-      // })
-      // .on("error", error => {
-      //   alert(error.message);
-      //   setDirection(null);
-      // });
-  }, [countContract.methods]);
+    countContract.methods.minus().send({
+      from: account,
+      gas: "200000"
+    });
+    // .on("transactionHash", txHash => {
+    //   console.log(`
+    //   Sending a transaction... (Call contract's function 'minus')
+    //   txHash: ${txHash}
+    //   `);
+    // })
+    // .on("receipt", receipt => {
+    //   console.log(
+    //     `
+    //   Received receipt which means your transaction(calling minus function)
+    //   is in klaytn block(#${receipt.blockNumber})
+    // `,
+    //     receipt
+    //   );
+    //   setDirection(null);
+    //   setTxHash(receipt.transactionHash);
+    // })
+    // .on("error", error => {
+    //   alert(error.message);
+    //   setDirection(null);
+    // });
+  }, [account, countContract.methods]);
 
   useEffect(() => {
     intervalId.current = setInterval(getCount, 1000);
@@ -121,6 +113,7 @@ const Count = () => {
 
   return (
     <div className="Count">
+      <h1>Balance: {balance}</h1>
       {Number(lastParticipant) !== 0 && (
         <div className="Count__lastParticipant">
           last participant: {lastParticipant}
