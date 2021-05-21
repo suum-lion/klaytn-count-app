@@ -32,4 +32,4 @@ $ npm run start
 
 ## 아직 안되어있는 부분
 
-- method 호출 event emitter 부분 오류
+- kaikas 플러그인 설치 안되었으면 설치 페이지 이동

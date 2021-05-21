@@ -11,7 +11,7 @@ import caver from "../klaytn/caver";
 import "./Count.scss";
 
 const Count = () => {
-  const { account, balance } = useKaikas();
+  const { account, balance, network } = useKaikas();
   const { DEPLOYED_ABI, DEPLOYED_ADDRESS } = useMemo(() => {
     return {
       DEPLOYED_ABI: process.env.DEPLOYED_ABI,
@@ -44,65 +44,40 @@ const Count = () => {
   }, [countContract.methods]);
 
   const setPlus = useCallback(() => {
-
     setDirection("plus");
 
-    // TODO event emitter 처리
-    countContract.methods.plus().send({
-      from: account,
-      gas: "200000"
-    });
-    // .on("transactionHash", txHash => {
-    //   console.log(`
-    //     Sending a transaction... (Call contract's function 'plus')
-    //     txHash: ${txHash}
-    //     `);
-    // })
-    // .on("receipt", receipt => {
-    //   console.log(
-    //     `
-    //     Received receipt! It means your transaction(calling plus function)
-    //     is in klaytn block(#${receipt.blockNumber})
-    //   `,
-    //     receipt
-    //   );
-    //   setDirection(null);
-    //   setTxHash(receipt.transactionHash);
-    // })
-    // .on("error", error => {
-    //   alert(error.message);
-    //   setDirection(null);
-    // });
+    countContract.methods
+      .plus()
+      .send({
+        from: account,
+        gas: "200000"
+      })
+      .then(receipt => {
+        setDirection(null);
+        setTxHash(receipt.transactionHash);
+      })
+      .catch(e => {
+        alert(e);
+        setDirection(null);
+      });
   }, [account, countContract.methods]);
 
   const setMinus = useCallback(() => {
-
     setDirection("minus");
-    countContract.methods.minus().send({
-      from: account,
-      gas: "200000"
-    });
-    // .on("transactionHash", txHash => {
-    //   console.log(`
-    //   Sending a transaction... (Call contract's function 'minus')
-    //   txHash: ${txHash}
-    //   `);
-    // })
-    // .on("receipt", receipt => {
-    //   console.log(
-    //     `
-    //   Received receipt which means your transaction(calling minus function)
-    //   is in klaytn block(#${receipt.blockNumber})
-    // `,
-    //     receipt
-    //   );
-    //   setDirection(null);
-    //   setTxHash(receipt.transactionHash);
-    // })
-    // .on("error", error => {
-    //   alert(error.message);
-    //   setDirection(null);
-    // });
+    countContract.methods
+      .minus()
+      .send({
+        from: account,
+        gas: "200000"
+      })
+      .then(receipt => {
+        setDirection(null);
+        setTxHash(receipt.transactionHash);
+      })
+      .catch(e => {
+        alert(e);
+        setDirection(null);
+      });
   }, [account, countContract.methods]);
 
   useEffect(() => {
@@ -145,7 +120,9 @@ const Count = () => {
           <a
             target="_blank"
             rel="noreferrer"
-            href={`https://scope.klaytn.com/transaction/${txHash}`}
+            href={`https://${
+              network === 1001 ? "baobab." : ""
+            }scope.klaytn.com/tx/${txHash}`}
             className="Count__lastTransactionLink"
           >
             {txHash}
