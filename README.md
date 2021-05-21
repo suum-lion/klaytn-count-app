@@ -32,6 +32,4 @@ $ npm run start
 
 ## 아직 안되어있는 부분
 
-- keystore.json 파일로 로그인
-- Kaikas (https://docs.kaikas.io/) 플러그인 사용하여 로그인
 - method 호출 event emitter 부분 오류
