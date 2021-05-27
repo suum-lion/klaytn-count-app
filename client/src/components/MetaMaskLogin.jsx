@@ -2,7 +2,6 @@ import MetaMaskOnboarding from "@metamask/onboarding";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./MetaMaskLogin.scss"
 
-const forwarderOrigin = "http://localhost:9010";
 
 const ONBOARD_TEXT = "Click here to install MetaMask!";
 const CONNECT_TEXT = "Connect";
@@ -16,7 +15,7 @@ const MetaMaskLogin = () => {
 
   useEffect(() => {
     if (!onboarding.current)
-      onboarding.current = new MetaMaskOnboarding({ forwarderOrigin });
+      onboarding.current = new MetaMaskOnboarding();
   }, []);
 
   useEffect(() => {
