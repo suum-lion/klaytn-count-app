@@ -1,17 +1,23 @@
-import { Button } from '@mantine/core';
+import { Button } from "@mantine/core";
 import MetaMaskOnboarding from "@metamask/onboarding";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./MetaMaskLogin.scss";
 
-const ONBOARD_TEXT = "Click here to install MetaMask";
-const CONNECT_TEXT = "Connect Wallet";
-const CONNECTED_TEXT = "Connected Wallet";
+const CONNECT_TEXT = "로그인";
 
 const MetaMaskLogin = () => {
-  const [buttonText, setButtonText] = useState(ONBOARD_TEXT);
+  const [buttonText, setButtonText] = useState(CONNECT_TEXT);
   const [isDisabled, setDisabled] = useState(false);
   const [accounts, setAccounts] = useState([]);
   const onboarding = useRef();
+
+  const CONNECTED_TEXT = useMemo(() => {
+    if (accounts.length !== 0)
+      return `${accounts[0].substring(0, 5)}...${accounts[0].substring(
+        accounts[0].length - 4
+      )}`;
+    return "";
+  }, [accounts]);
 
   useEffect(() => {
     if (!onboarding.current) onboarding.current = new MetaMaskOnboarding();
@@ -28,7 +34,7 @@ const MetaMaskLogin = () => {
         setDisabled(false);
       }
     }
-  }, [accounts]);
+  }, [CONNECTED_TEXT, accounts]);
 
   useEffect(() => {
     function handleNewAccounts(newAccounts) {
@@ -56,7 +62,11 @@ const MetaMaskLogin = () => {
   }, []);
 
   return (
-    <Button color="cyan" disabled={isDisabled} onClick={onClick}>{buttonText}</Button>
+    <>
+      <Button color="cyan" disabled={isDisabled} onClick={onClick}>
+        {buttonText}
+      </Button>
+    </>
   );
 };
 
