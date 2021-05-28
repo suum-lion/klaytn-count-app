@@ -1,11 +1,11 @@
+import { Button } from '@mantine/core';
 import MetaMaskOnboarding from "@metamask/onboarding";
 import { useCallback, useEffect, useRef, useState } from "react";
-import "./MetaMaskLogin.scss"
+import "./MetaMaskLogin.scss";
 
-
-const ONBOARD_TEXT = "Click here to install MetaMask!";
-const CONNECT_TEXT = "Connect";
-const CONNECTED_TEXT = "Connected";
+const ONBOARD_TEXT = "Click here to install MetaMask";
+const CONNECT_TEXT = "Connect Wallet";
+const CONNECTED_TEXT = "Connected Wallet";
 
 const MetaMaskLogin = () => {
   const [buttonText, setButtonText] = useState(ONBOARD_TEXT);
@@ -14,8 +14,7 @@ const MetaMaskLogin = () => {
   const onboarding = useRef();
 
   useEffect(() => {
-    if (!onboarding.current)
-      onboarding.current = new MetaMaskOnboarding();
+    if (!onboarding.current) onboarding.current = new MetaMaskOnboarding();
   }, []);
 
   useEffect(() => {
@@ -57,9 +56,7 @@ const MetaMaskLogin = () => {
   }, []);
 
   return (
-    <button className="login-btn" type="button" disabled={isDisabled} onClick={onClick}>
-      {buttonText}
-    </button>
+    <Button color="cyan" disabled={isDisabled} onClick={onClick}>{buttonText}</Button>
   );
 };
 

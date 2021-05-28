@@ -1,11 +1,11 @@
 import React from "react";
 import "./App.scss";
-import MetaMaskLogin from "./components/MetaMaskLogin";
+import Header from "./components/Header";
 
 const App = ({ children }) => {
   return (
     <div className="App">
-      <MetaMaskLogin />
+      <Header />
     </div>
   );
 };
